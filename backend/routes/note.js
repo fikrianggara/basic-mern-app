@@ -1,23 +1,13 @@
 const express = require("express");
 const router = express.Router();
+const notesController = require("../controllers/note");
 
 router.use(express.json());
+router
+  .route("/")
+  .get(notesController.getAllNotes)
+  .post(notesController.createNewNote);
+//   .patch(notesController.updateUser)
+//   .delete(notesController.DeleteUser);
 
-// homepage, get into this route if '/', '/index' or '/index.html'
-router.get("^/$|index(.html)", (req, res) => {
-  res.send("from /notes");
-});
-
-// getting books by id
-router.get("/:id", (req, res) => {
-  const params = req.params;
-  res.send(`note with id ${params.id}`);
-});
-router.post("/", (req, res) => {
-  const body = req.body;
-  res.json({ ...body });
-});
-router.all("*", (req, res) => {
-  res.json({ message: "not found" });
-});
 module.exports = router;
