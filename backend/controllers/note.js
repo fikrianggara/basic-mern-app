@@ -49,11 +49,46 @@ const createNewNote = asyncHandler(async (req, res) => {
 //@desc Update a note
 //@route PATCH /note
 //@access public
-const updateNote = asyncHandler(async (req, res) => {});
+const updateNote = asyncHandler(async (req, res) => {
+  const { userId, id, title, text, completed } = req.body;
+  //validate data
+  if (!userId || !title || !text || !completed) {
+    return res.status(400).json({ message: "All fields are required" });
+  }
+  //validate userId
+  const user = await User.findById(userId).lean().exec();
+  if (!user) {
+    return res
+      .status(400)
+      .json({ message: "user not found, user is required to do the action" });
+  }
+  // check note availability
+  const note = await Note.findById(id).exec();
+  if (!note) {
+    return res.status(404).json({ message: "note not found" });
+  }
+  note.user = user;
+  note.title = title;
+  note.text = text;
+  note.completed = completed;
+  const updatedNote = await note.save();
+  res.json({ message: `note with title ${updatedNote.title} updated` });
+});
 
 //@desc Delete a note
 //@route DELETE /note
 //@access public
-const deleteNote = asyncHandler(async (req, res) => {});
+const deleteNote = asyncHandler(async (req, res) => {
+  const { id } = req.body;
+  if (!id) {
+    return res.status(400).json({ mesage: "All fileds are required" });
+  }
+  const note = await Note.findById(id).exec();
+  if (!note) {
+    return res.status(404).json({ message: "note not found" });
+  }
+  const deletedNote = await note.deleteOne();
+  res.json({ message: `note with id: ${deletedNote._id.toString()} deleted` });
+});
 
 module.exports = { getAllNotes, createNewNote, updateNote, deleteNote };

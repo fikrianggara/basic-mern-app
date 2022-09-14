@@ -6,8 +6,8 @@ router.use(express.json());
 router
   .route("/")
   .get(notesController.getAllNotes)
-  .post(notesController.createNewNote);
-//   .patch(notesController.updateUser)
-//   .delete(notesController.DeleteUser);
+  .post(notesController.createNewNote)
+  .patch(notesController.updateNote)
+  .delete(notesController.deleteNote);
 
 module.exports = router;

@@ -3,7 +3,7 @@ const AutoIncrement = require("mongoose-sequence")(mongoose);
 const noteSchema = new mongoose.Schema(
   {
     user: {
-      //referencing on mongoose schema
+      //referencing on mongoose schema named 'User'
       type: mongoose.Schema.Types.ObjectId,
       required: true,
       ref: "User",
@@ -26,7 +26,7 @@ const noteSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
-//add autoIncrement plugin, where the increment field named as 'ticket' and start from 500
+//add autoIncrement plugin, where the increment field named as 'ticket' and start from 500. will create counter collection
 noteSchema.plugin(AutoIncrement, {
   inc_field: "ticket",
   id: "ticketNums",
