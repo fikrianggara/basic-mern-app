@@ -11,7 +11,14 @@ const getAllNotes = asyncHandler(async (req, res) => {
   if (!notes?.length) {
     return res.status(400).json({ message: "no note found" });
   }
-  res.json(notes);
+  //notes with user
+  const notesWithUser = await Promise.all(
+    notes.map(async (note) => {
+      const user = await User.findById(note.user).lean().exec();
+      return { ...note, username: user.username };
+    })
+  );
+  res.json(notesWithUser);
 });
 
 //@desc Create a note
