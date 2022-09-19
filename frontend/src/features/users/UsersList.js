@@ -8,7 +8,12 @@ const UsersList = () => {
     isSuccess,
     isError,
     error,
-  } = useGetUsersQuery();
+  } = useGetUsersQuery(undefined, {
+    pollingInterval: 60000,
+    refetchOnFocus: true,
+    refetchOnMountOrArgChange: true,
+  });
+  console.log(users);
   let content;
   if (isLoading) content = <p>Loading...</p>;
   if (isError) {
