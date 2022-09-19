@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
 import { ROLES } from "../../config/roles";
 
-const USER_REGEX = /^[A-Z]{3,20}$/;
+const USER_REGEX = /^[A-z]{3,20}$/;
 const PWD_REGEX = /^[A-z0-9!@#$%]{4,12}$/;
 
 const NewUserForm = () => {
@@ -19,7 +19,7 @@ const NewUserForm = () => {
   const [roles, setRoles] = useState(["Employee"]);
 
   useEffect(() => {
-    setvalidPassword(USER_REGEX.test(username));
+    setValidUsername(USER_REGEX.test(username));
   }, [username]);
   useEffect(() => {
     setvalidPassword(PWD_REGEX.test(password));
@@ -34,7 +34,9 @@ const NewUserForm = () => {
     }
   }, [isSuccess, navigate]);
 
-  const onUsernameChanged = (e) => setUsername(e.target.value);
+  const onUsernameChanged = (e) => {
+    setUsername(e.target.value);
+  };
   const onPasswordChanged = (e) => setPassword(e.target.value);
 
   const onRolesChanged = (e) => {
@@ -42,6 +44,7 @@ const NewUserForm = () => {
       e.target.selectedOptions,
       (option) => option.value
     );
+    console.log(values);
     setRoles(values);
   };
 

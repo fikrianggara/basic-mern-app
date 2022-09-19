@@ -1,7 +1,13 @@
-import React from "react";
+import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectUserById } from "./usersApiSlice";
 
 const EditUser = () => {
-  return <div>EditUser</div>;
+  const { id } = useParams();
+  const user = useSelector((state) => selectUserById(state, id));
+  const content = user ? <div>{JSON.stringify(user)}</div> : null;
+  <p>Loading...</p>;
+  return content;
 };
 
 export default EditUser;
