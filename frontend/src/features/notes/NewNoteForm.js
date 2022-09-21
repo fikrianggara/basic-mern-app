@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { useAddNewNoteMutation } from "./notesApiSlice";
-import { json, UNSAFE_NavigationContext, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faSave } from "@fortawesome/free-solid-svg-icons";
-import { ROLES } from "../../config/roles";
 
 const NewNoteForm = ({ users }) => {
   const [addNewNote, { isLoading, isSuccess, isError, error }] =
@@ -41,10 +40,10 @@ const NewNoteForm = ({ users }) => {
   }, [isSuccess, navigate]);
   const canSave =
     title !== "" && text !== "" && selectedUser.length && !isLoading;
-  const onSaveNotesClicked = (e) => {
+  const onSaveNotesClicked = async (e) => {
     e.preventDefault();
     if (canSave) {
-      addNewNote({ userId: selectedUser, title, text });
+      await addNewNote({ userId: selectedUser, title, text });
     }
   };
   const options = Object.values(users).map((user) => {
