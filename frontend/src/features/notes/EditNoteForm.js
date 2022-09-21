@@ -17,6 +17,7 @@ const EditNoteForm = ({ users, note }) => {
       error: errorDel,
     },
   ] = useDeleteNoteMutation();
+
   const navigate = useNavigate();
   const [title, setTitle] = useState(note.title);
   const [text, setText] = useState(note.text);
@@ -28,7 +29,6 @@ const EditNoteForm = ({ users, note }) => {
   const onTitleChanged = (e) => setTitle(e.target.value);
   const onTextChanged = (e) => setText(e.target.value);
   const onCompletedChanged = (e) => setCompleted(!completed);
-
   const onSelectedUserChanged = (e) => {
     const values = Array.from(
       e.target.selectedOptions,
@@ -37,6 +37,7 @@ const EditNoteForm = ({ users, note }) => {
     console.log(values);
     setSelectedUser(values[0]);
   };
+
   useEffect(() => {
     setIsValidTitle((prev) => title !== "" || title !== " ");
   }, [title]);
@@ -46,15 +47,18 @@ const EditNoteForm = ({ users, note }) => {
 
   useEffect(() => {
     if (isSuccess || isSuccessDel) {
+      console.log("success updating");
       setTitle("");
       setText("");
       navigate("/dash/notes");
     }
   }, [isSuccess, isSuccessDel, navigate]);
+
   const canSave =
     title !== "" && text !== "" && selectedUser.length && !isLoading;
+
   const onSaveNotesClicked = async (e) => {
-    console.log(note.id);
+    e.preventDefault();
     if (canSave) {
       await updateNote({
         userId: selectedUser,
@@ -69,6 +73,7 @@ const EditNoteForm = ({ users, note }) => {
     e.preventDefault();
     await deleteNote(note.id);
   };
+
   const options = Object.values(users).map((user) => {
     return (
       <option key={user._id} value={user._id}>
@@ -120,11 +125,10 @@ const EditNoteForm = ({ users, note }) => {
         <label className="form__label" htmlFor="text">
           TEXT: <span className="nowrap">required</span>
         </label>
-        <input
+        <textarea
           className={`form__input ${validTextClass}`}
           id="text"
           name="text"
-          type="text"
           required={true}
           value={text}
           onChange={onTextChanged}
@@ -159,6 +163,12 @@ const EditNoteForm = ({ users, note }) => {
         >
           {options}
         </select>
+        <div className="form__label" htmlFor="created_at">
+          created_at: <span className="nowrap">{note.createdAt}</span>
+        </div>
+        <div className="form__label" htmlFor="updated_at">
+          updated_at: <span className="nowrap">{note.updatedAt}</span>
+        </div>
       </form>
     </>
   );

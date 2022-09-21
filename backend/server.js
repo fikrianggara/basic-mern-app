@@ -9,6 +9,7 @@ const connectDB = require("./config/dbConnection");
 const mongoose = require("mongoose");
 const corsOptions = require("./config/corsOptions");
 const userRoutes = require("./routes/user");
+const authRoutes = require("./routes/auth");
 const noteRoutes = require("./routes/note");
 const PORT = process.env.PORT || 3000;
 
@@ -18,6 +19,7 @@ app.use(cors(corsOptions));
 
 connectDB();
 // app.use(logger);
+app.use("/auth", authRoutes);
 app.use("/user", userRoutes);
 app.use("/note", noteRoutes);
 

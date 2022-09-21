@@ -27,13 +27,11 @@ const getAllNotes = asyncHandler(async (req, res) => {
 const createNewNote = asyncHandler(async (req, res) => {
   const { userId, title, text } = req.body;
   //validate data
-  console.log(req.body);
   if (!userId || !title || !text) {
     return res.status(400).json({ message: "All fields are required" });
   }
   //validate userId
   const user = await User.findById(userId).lean().exec();
-  console.log(user);
   if (!user) {
     return res
       .status(400)
@@ -58,9 +56,9 @@ const createNewNote = asyncHandler(async (req, res) => {
 //@access public
 const updateNote = asyncHandler(async (req, res) => {
   const { userId, id, title, text, completed } = req.body;
-  console.log(req.body);
   //validate data
-  if (!userId || !title || !text || !completed) {
+  if (!userId || !title || !text || typeof completed !== "boolean") {
+    console.log(typeof completed);
     return res.status(400).json({ message: "All fields are required" });
   }
   //validate userId
@@ -70,6 +68,7 @@ const updateNote = asyncHandler(async (req, res) => {
       .status(400)
       .json({ message: "user not found, user is required to do the action" });
   }
+  console.log("user", user);
   // check note availability
   const note = await Note.findById(id).exec();
   if (!note) {
@@ -88,7 +87,6 @@ const updateNote = asyncHandler(async (req, res) => {
 //@access public
 const deleteNote = asyncHandler(async (req, res) => {
   const { id } = req.body;
-  console.log(req.body);
   if (!id) {
     return res.status(400).json({ mesage: "All fileds are required" });
   }
