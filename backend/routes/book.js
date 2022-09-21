@@ -1,4 +1,7 @@
 const express = require("express");
+const verifyJWT = require("../middleware/verifyJWT");
+
+router.use(verifyJWT);
 const router = express.Router();
 
 router.use(express.json());
